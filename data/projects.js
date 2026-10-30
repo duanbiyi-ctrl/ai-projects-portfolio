@@ -1,0 +1,65 @@
+// Only publish verified facts here. Planned projects and illustrative demos stay labeled.
+export const projects = [
+  {
+    id: "aicv",
+    number: "01",
+    name: "AICV",
+    subtitle: "让简历优化，有据可依。",
+    description: "从岗位要求与真实经历出发，探索可追溯、可确认的 AI 简历优化流程。",
+    category: "application",
+    status: "需求设计",
+    statusType: "design",
+    tags: ["AI 应用", "求职场景", "证据匹配"],
+    visual: "aicv",
+    stage: "已有需求与提示词文档；产品、模型接入与评估尚未完成。",
+    problem: "简历优化不应以编造经历换取更漂亮的表达。这个项目希望把岗位要求、已有经历和修改建议连接起来，让用户理解每一次修改的依据。",
+    contribution: "当前可核实产出为需求与提示词文档，包含 JD 解析、经历诊断、证据匹配、信息追问及面试风险提示。实际开发职责与实现记录将在构建后补充。",
+    decisions: [
+      ["先匹配证据，再优化表达", "对没有经历支持的岗位要求，明确标记缺口，而不是生成虚构经历。"],
+      ["让用户确认信息缺口", "缺少职责、结果或数据时先追问；不能确认的内容保留待补充标记。"],
+      ["不把匹配分当作录用概率", "评分规则和有效性尚未验证，不能用于预测招聘结果。"]
+    ],
+    validation: "尚无真实用户数据或效果指标。计划验证：事实一致性、建议可追溯性、缺失信息识别，以及用户确认流程。页面中的演示仅为人工编写的交互示意，不调用 AI。需求与提示词文档目前保存在私有仓库，暂未提供公开查阅入口。",
+    limitations: "目前不是可用的简历优化产品。静态示例不能证明模型能力，也不接受或上传真实简历。",
+    evidenceStatus: "需求文档暂未公开 · 评估证据待补充",
+    demo: true
+  },
+  {
+    id: "project-02",
+    number: "02",
+    name: "下一次探索",
+    subtitle: "为下一个好问题，留一个位置。",
+    description: "项目占位。方向、目标用户与实现方案待确定，后续替换为真实项目。",
+    category: "exploration",
+    status: "项目占位",
+    statusType: "planned",
+    tags: ["方向待定", "尚未开始"],
+    visual: "orbit",
+    stage: "仅为作品集布局占位，不代表已启动或完成的项目。",
+    problem: "待补充真实问题、使用场景与目标用户。",
+    contribution: "暂无项目产出或个人贡献记录。",
+    decisions: [],
+    validation: "尚未开展验证。确定方向后，将补充成功标准、基线与验证结果。",
+    limitations: "暂无在线体验、代码实现或效果数据。",
+    demo: false
+  },
+  {
+    id: "project-03",
+    number: "03",
+    name: "未命名实验",
+    subtitle: "保持好奇，让可能性发生。",
+    description: "项目占位。为未来的 AI 实验预留，用真实的构建记录逐步填满。",
+    category: "exploration",
+    status: "项目占位",
+    statusType: "planned",
+    tags: ["实验预留", "尚未开始"],
+    visual: "grid",
+    stage: "仅为作品集布局占位，不代表已启动或完成的项目。",
+    problem: "待补充值得解决的问题与项目边界。",
+    contribution: "暂无项目产出或个人贡献记录。",
+    decisions: [],
+    validation: "尚未开展验证。未来将记录实验方法、失败案例与迭代结果。",
+    limitations: "暂无在线体验、代码实现或效果数据。",
+    demo: false
+  }
+];
