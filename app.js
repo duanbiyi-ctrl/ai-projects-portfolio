@@ -13,6 +13,9 @@ const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => (
 })[character]);
 
 function artwork(project) {
+  if (project.cover) {
+    return `<span class="visual-label label-top">REAL INTERFACE / LOCAL MOCK</span><div class="screenshot-cover"><span class="preview-chrome" aria-hidden="true"><i></i><i></i><i></i></span><img src="${escapeHTML(project.cover)}" alt="${escapeHTML(project.name)} 本地 Mock 原型的真实诊断界面，使用虚构样例" width="1440" height="1100" loading="lazy"></div><span class="visual-label label-bottom">AICV / RUNNABLE PROTOTYPE</span>`;
+  }
   if (project.visual === "aicv") {
     return `<div class="cv-sheet cv-sheet-back"></div><div class="cv-sheet"><div class="cv-sheet-heading"><span class="cv-avatar"></span><div><b></b><i></i></div><span class="cv-mini-mark">↗</span></div><div class="cv-rule"></div><div class="cv-lines"><i></i><i></i><i></i></div><div class="cv-highlight"><span>✓</span> 每一处优化，都有依据</div><div class="cv-lines short"><i></i><i></i></div></div><span class="visual-label label-top">CONTEXT → EVIDENCE</span><span class="visual-label label-bottom">AICV / WORK IN PROGRESS</span><div class="cv-floating">✳ <span>事实优先</span></div>`;
   }
@@ -40,7 +43,7 @@ function renderProjects() {
         <p class="card-subtitle">${escapeHTML(project.subtitle)}</p>
         <p class="card-description">${escapeHTML(project.description)}</p>
         <div class="tags">${project.tags.map((tag) => `<span>${escapeHTML(tag)}</span>`).join("")}</div>
-        <a class="card-link" href="#project/${project.id}">${project.demo ? "查看项目与交互示例" : "查看项目占位说明"}<span aria-hidden="true">↗</span></a>
+        <a class="card-link" href="#project/${project.id}">${escapeHTML(project.cardAction ?? (project.demo ? "查看项目与交互示例" : "查看项目占位说明"))}<span aria-hidden="true">↗</span></a>
       </div>
     </article>`).join("");
   document.querySelector("#empty-state").hidden = visible.length > 0;
@@ -49,10 +52,58 @@ function renderProjects() {
   document.querySelector("#results-announcement").textContent = `显示 ${visible.length} 个项目`;
 }
 
+function screenshotMarkup(project) {
+  if (!project.screenshots?.length) return "";
+  const first = project.screenshots[0];
+  const source = `assets/${project.id}/${first.file}`;
+  return `<section class="screenshot-gallery" aria-labelledby="gallery-title">
+    <div class="detail-section-heading"><h3 id="gallery-title">真实界面，逐步查看</h3><span class="demo-label">2026-10-30 截取 · 本地 Mock</span></div>
+    <p class="gallery-intro">全部使用内置虚构样例及明确标注的演示回答。截图可验证界面与流程，不能证明真实模型效果。点击图片可打开原图查看细节。</p>
+    <figure class="gallery-figure">
+      <a id="screenshot-original" class="gallery-image-link" href="${source}" target="_blank" rel="noopener noreferrer" aria-label="查看${escapeHTML(first.title)}截图原图（新标签页）"><img id="screenshot-image" src="${source}" alt="${escapeHTML(first.title)}：AICV 本地 Mock 原型，虚构样例" width="1440" height="1100" loading="lazy"></a>
+      <figcaption id="screenshot-caption" aria-live="polite"><strong>${escapeHTML(first.title)}</strong><span>${escapeHTML(first.description)}</span></figcaption>
+    </figure>
+    <div class="gallery-navigation"><button type="button" class="gallery-arrow" id="screenshot-previous" aria-label="上一张项目截图" disabled>←</button><span id="screenshot-counter" class="mono">01 / ${String(project.screenshots.length).padStart(2, "0")}</span><button type="button" class="gallery-arrow" id="screenshot-next" aria-label="下一张项目截图">→</button></div>
+    <div class="gallery-selectors" role="group" aria-label="选择项目截图">${project.screenshots.map((shot, index) => `<button type="button" data-screenshot="${index}" aria-pressed="${index === 0}"><span>${String(index + 1).padStart(2, "0")}</span>${escapeHTML(shot.title)}</button>`).join("")}</div>
+  </section>`;
+}
+
+function walkthroughMarkup(project) {
+  if (!project.walkthrough?.length) return "";
+  return `<section class="project-walkthrough" aria-labelledby="walkthrough-title"><div class="detail-section-heading"><h3 id="walkthrough-title">从材料到结果的八个步骤</h3><span class="mono">INPUT → EVIDENCE → OUTPUT</span></div><ol>${project.walkthrough.map(([title, description], index) => `<li><span class="walkthrough-number">${String(index + 1).padStart(2, "0")}</span><div><h4>${escapeHTML(title)}</h4><p>${escapeHTML(description)}</p></div></li>`).join("")}</ol></section>`;
+}
+
+function bindScreenshots(project) {
+  if (!project.screenshots?.length) return;
+  let current = 0;
+  const buttons = [...content.querySelectorAll("[data-screenshot]")];
+  const previous = content.querySelector("#screenshot-previous");
+  const next = content.querySelector("#screenshot-next");
+  function select(index) {
+    current = index;
+    const shot = project.screenshots[index];
+    const source = `assets/${project.id}/${shot.file}`;
+    const image = content.querySelector("#screenshot-image");
+    const original = content.querySelector("#screenshot-original");
+    image.src = source;
+    image.alt = `${shot.title}：AICV 本地 Mock 原型，虚构样例`;
+    original.href = source;
+    original.setAttribute("aria-label", `查看${shot.title}截图原图（新标签页）`);
+    content.querySelector("#screenshot-caption").innerHTML = `<strong>${escapeHTML(shot.title)}</strong><span>${escapeHTML(shot.description)}</span>`;
+    content.querySelector("#screenshot-counter").textContent = `${String(index + 1).padStart(2, "0")} / ${String(project.screenshots.length).padStart(2, "0")}`;
+    buttons.forEach((button, buttonIndex) => button.setAttribute("aria-pressed", String(buttonIndex === index)));
+    previous.disabled = index === 0;
+    next.disabled = index === project.screenshots.length - 1;
+  }
+  buttons.forEach((button, index) => button.addEventListener("click", () => select(index)));
+  previous.addEventListener("click", () => select(current - 1));
+  next.addEventListener("click", () => select(current + 1));
+}
+
 function demoMarkup() {
   return `<section class="demo-section" aria-labelledby="demo-title">
     <div class="detail-section-heading"><h3 id="demo-title">体验一次「有依据的修改」</h3><span class="demo-label">静态交互示例 · 非 AI 实时生成</span></div>
-    <p>以下内容均为虚构示例，用于解释产品交互，不代表作者经历或项目效果。无需提交个人信息。</p>
+    <p>这是作品集内的设计原则小样，不是完整 AICV 工作台。以下内容均为人工编写的虚构示例，不代表作者经历或项目效果，无需提交个人信息。</p>
     <div class="demo-context"><span class="mono">示例 JD 要求</span><p>能将用户需求转化为产品流程，并参与功能验证。</p></div>
     <div class="demo-tabs" role="tablist" aria-label="简历优化示例">
       <button type="button" id="tab-original" role="tab" aria-selected="true" aria-controls="panel-original" tabindex="0">01 原始经历</button>
@@ -72,6 +123,9 @@ function openProject(project) {
     <div class="detail-header"><span class="project-status status-${project.statusType}"><i></i>${project.status}</span><h2 id="dialog-title">${escapeHTML(project.name)}</h2><p class="detail-subtitle">${escapeHTML(project.subtitle)}</p><p>${escapeHTML(project.description)}</p><div class="tags">${project.tags.map((tag) => `<span>${escapeHTML(tag)}</span>`).join("")}</div></div>
     <div class="stage-notice"><span aria-hidden="true">◉</span><div><strong>当前阶段</strong><p>${escapeHTML(project.stage)}</p></div></div>
     <div class="detail-facts"><section><h3><span>01</span> 问题与目标</h3><p>${escapeHTML(project.problem)}</p></section><section><h3><span>02</span> 当前产出与贡献</h3><p>${escapeHTML(project.contribution)}</p></section></div>
+    ${project.technologies?.length ? `<div class="project-tech" aria-label="已使用的技术"><span class="mono">BUILT WITH</span><div class="tags">${project.technologies.map((technology) => `<span>${escapeHTML(technology)}</span>`).join("")}</div></div>` : ""}
+    ${screenshotMarkup(project)}
+    ${walkthroughMarkup(project)}
     ${project.demo ? demoMarkup() : ""}
     ${project.decisions.length ? `<section class="decisions"><h3>关键设计取舍</h3>${project.decisions.map(([title, description], index) => `<article><span class="mono">0${index + 1}</span><div><h4>${escapeHTML(title)}</h4><p>${escapeHTML(description)}</p></div></article>`).join("")}</section>` : ""}
     <section class="detail-validation"><h3>验证计划与证据</h3><p>${escapeHTML(project.validation)}</p>${project.source ? `<a class="button button-outline" href="${project.source}" target="_blank" rel="noopener noreferrer">${project.sourceLabel} ↗</a>` : `<span class="pending-pill">${escapeHTML(project.evidenceStatus ?? "证据材料待补充")}</span>`}</section>
@@ -82,6 +136,7 @@ function openProject(project) {
   dialog.scrollTop = 0;
   document.title = `${project.name} — 段必义 · AI Projects`;
   document.querySelector("#close-dialog").focus();
+  bindScreenshots(project);
   document.querySelector("#copy-project-link").addEventListener("click", async () => {
     const feedback = document.querySelector("#copy-feedback");
     try {

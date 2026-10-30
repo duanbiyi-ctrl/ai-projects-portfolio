@@ -8,6 +8,7 @@ on:
       - "styles.css"
       - "app.js"
       - "data/**"
+      - "assets/aicv/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -44,6 +45,8 @@ jobs:
           mkdir -p _site/data
           cp index.html styles.css app.js _site/
           cp data/projects.js _site/data/
+          mkdir -p _site/assets/aicv
+          cp assets/aicv/*.jpg _site/assets/aicv/
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:

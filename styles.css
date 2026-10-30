@@ -125,6 +125,11 @@ h2{font-size:30px;letter-spacing:-.8px;font-weight:550;margin:0;line-height:1.45
 .mono{font:9px var(--mono);letter-spacing:1px;color:#909d84}
 .project-status{font-size:9px;display:inline-flex;gap:5px;align-items:center;padding:4px 7px;background:#252e1d;color:#c1dba3;border:1px solid #48573a;border-radius:4px;white-space:nowrap}
 .project-status i{width:4px;height:4px;border-radius:50%;background:currentColor}
+.status-prototype{background:#263820;color:#c2f970;border-color:#587442}
+.screenshot-cover{position:absolute;inset:43px 24px 35px;overflow:hidden;border:1px solid #aebda466;border-radius:6px;box-shadow:0 12px 25px #0005;transform:rotate(-3deg);background:#f7f8fa}
+.preview-chrome{display:flex;align-items:center;gap:4px;height:17px;padding-left:9px;background:#dce4d5}
+.preview-chrome i{width:4px;height:4px;border-radius:50%;background:#88967d}
+.screenshot-cover img{display:block;width:100%;height:auto}
 .status-planned{background:#242823;color:#a3ad9c;border-color:#3c4535}
 .project-card h3{margin:0 0 8px;font-size:23px;font-weight:550;letter-spacing:-.5px}
 .project-card h3 a:hover{color:var(--accent)}
@@ -178,6 +183,35 @@ dialog::backdrop{background:#050904bd;backdrop-filter:blur(8px)}
 .detail-facts h3,.demo-section h3,.decisions h3,.detail-validation h3,.limitations h3{font-size:16px;font-weight:500;margin:0 0 12px}
 .detail-facts h3>span{font:10px var(--mono);color:#8fa478;margin-right:8px}
 .detail-facts p{margin:0}
+.project-tech{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:28px}
+.project-tech .tags{margin:0}
+.screenshot-gallery,.project-walkthrough{margin-bottom:32px}
+.screenshot-gallery h3,.project-walkthrough h3{font-size:16px;font-weight:500;margin:0 0 12px}
+.gallery-intro{font-size:11px;color:#aabb9b;line-height:1.9;margin:3px 0 18px}
+.gallery-figure{margin:0;border:1px solid #3c4933;border-radius:7px;overflow:hidden}
+.gallery-image-link{display:block;aspect-ratio:1440/1100;background:#e8ede4}
+.gallery-image-link img{display:block;width:100%;height:100%;object-fit:contain}
+.gallery-image-link:hover{outline:2px solid var(--accent);outline-offset:-2px}
+.gallery-figure figcaption{padding:16px 18px;background:#20291a;min-height:110px}
+.gallery-figure figcaption strong{display:block;font-size:13px;font-weight:500;margin-bottom:7px;color:#d9ebc8}
+.gallery-figure figcaption>span{display:block;color:#aabb9b;font-size:12px;line-height:1.9}
+.gallery-navigation{display:flex;align-items:center;justify-content:center;gap:22px;margin:14px 0}
+.gallery-arrow{width:44px;height:44px;border:1px solid #4a5a3b;border-radius:5px;background:#242f1b;color:var(--accent);font-size:18px}
+.gallery-arrow:hover:not(:disabled){background:#354628}
+.gallery-arrow:disabled{opacity:.35}
+.gallery-selectors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.gallery-selectors button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-height:58px;padding:10px;border:1px solid #34422a;border-radius:5px;background:#1a2215;color:#aab99a;font-size:11px;text-align:left}
+.gallery-selectors button>span{font:9px var(--mono);color:#839970}
+.gallery-selectors button[aria-pressed="true"]{background:#304220;border-color:#819e59;color:var(--accent)}
+.gallery-selectors button:hover{border-color:#819e59}
+.project-walkthrough{margin-top:32px}
+.project-walkthrough .detail-section-heading{align-items:center;margin-bottom:8px}
+.project-walkthrough ol{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.project-walkthrough li{display:flex;gap:12px;border-top:1px solid #34402c;padding:18px 0}
+.walkthrough-number{font:10px var(--mono);color:var(--accent);padding-top:4px}
+.project-walkthrough h4{font-size:13px;font-weight:500;margin:0 0 7px}
+.project-walkthrough p{font-size:12px;color:#acb8a0;line-height:1.9;margin:0}
+@media(max-width:480px){.gallery-selectors{grid-template-columns:repeat(3,minmax(0,1fr))}.gallery-figure figcaption{padding:14px;min-height:140px}.project-walkthrough ol{grid-template-columns:1fr}.project-tech{gap:10px}.screenshot-cover{inset:43px 28px 35px}}
 .demo-section{background:#11160e;border:1px solid #3b4e2c;border-radius:8px;padding:23px;margin-bottom:30px}
 .detail-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .demo-label{font-size:9px;line-height:1.7;color:#c5d9ad;border:1px solid #4b5a3d;border-radius:4px;padding:3px 6px}
